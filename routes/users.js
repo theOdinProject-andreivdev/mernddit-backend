@@ -2,11 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 let User = require('../models/user');
-
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
-});
+let bcrypt = require('bcrypt');
 
 router.route('/add').post((req, res) => {
   const _username = req.body.username;
@@ -21,16 +17,21 @@ router.route('/add').post((req, res) => {
     .then((countResult) => {
       if (countResult == 0) {
         console.log('create user');
+
         const newUser = new User({
           username: _username,
           password: _password,
           joinDate: _joinDate,
         });
 
-        newUser
-          .save()
-          .then(() => res.json('User added!'))
-          .catch((err) => res.status(400).json('Error: ' + err));
+        bcrypt.hash(_password, 10, (err, hashedPassword) => {
+          newUser.password = hashedPassword;
+
+          newUser
+            .save()
+            .then(() => res.json('User added!'))
+            .catch((err) => res.status(400).json('Error: ' + err));
+        });
       } else {
         console.log('user exists');
         res.status(400).json('Error: user already exists');
