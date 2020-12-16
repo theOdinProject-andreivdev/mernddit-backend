@@ -15,7 +15,7 @@ router.post('/login', function (req, response, next) {
         console.log(user);
         bcrypt.compare(password, user.password, (err, res) => {
           if (res) {
-            response.status(400).json('auth succesfull');
+            response.json('auth succesfull');
           } else {
             response.status(400).json('wrong password');
           }
