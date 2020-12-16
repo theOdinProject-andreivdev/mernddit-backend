@@ -13,8 +13,8 @@ let commentSchema = new Schema({
   },
 });
 
-postSchema.virtual('url').get(function () {
-  return '/comment/' + this._id;
+commentSchema.virtual('url').get(function () {
+  return '/post/' + this.post + '/comment/' + this._id;
 });
 
 module.exports = mongoose.model('comment', commentSchema);
