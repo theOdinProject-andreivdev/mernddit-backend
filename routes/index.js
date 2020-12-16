@@ -12,14 +12,16 @@ router.post('/login', function (req, response, next) {
     },
     (err, user) => {
       {
-        console.log(user);
-        bcrypt.compare(password, user.password, (err, res) => {
-          if (res) {
-            response.json('auth succesfull');
-          } else {
-            response.status(400).json('wrong password');
-          }
-        });
+        if (user) {
+          console.log(user);
+          bcrypt.compare(password, user.password, (err, res) => {
+            if (res) {
+              response.json('auth succesfull');
+            } else {
+              response.status(400).json('wrong password');
+            }
+          });
+        } else response.status(400).json('user does not exist');
       }
     }
   );
