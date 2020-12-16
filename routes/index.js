@@ -24,12 +24,21 @@ router.post('/login', function (req, response, next) {
                 }
               );
 
-              response.json({ auth: 'auth succesfull', token: token });
+              response.json({
+                auth: true,
+                message: 'auth succesfull',
+                token: token,
+              });
             } else {
-              response.status(400).json({ auth: 'wrong password' });
+              response
+                .status(400)
+                .json({ auth: false, message: 'wrong password' });
             }
           });
-        } else response.status(400).json({ auth: 'user does not exist' });
+        } else
+          response
+            .status(400)
+            .json({ auth: false, message: 'user does not exist' });
       }
     }
   );
